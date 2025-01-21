@@ -25,7 +25,7 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
 
   create() {
     // Calculer la vitesse de déplacement en fonction de la largeur de l'écran
-    this.trashBinSpeed = this.scale.width; // La poubelle peut traverser l'écran en environ 1 seconde
+    this.trashBinSpeed = this.scale.width / 2; // La poubelle peut traverser l'écran en environ 2 secondes
 
     // Ajouter l'arrière-plan
     this.background = this.add.image(0, 0, "background").setOrigin(0, 0);
@@ -77,6 +77,36 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
 
     // Contrôles du joueur
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    // Ajouter des zones interactives pour les contrôles tactiles
+    this.addTouchControls();
+  }
+
+  addTouchControls() {
+    // Zone pour le contrôle gauche
+    const leftZone = this.add.zone(0, 0, this.scale.width / 2, this.scale.height);
+    leftZone.setOrigin(0, 0).setInteractive();
+    leftZone.on("pointerdown", () => {
+      this.trashBin.setVelocityX(-this.trashBinSpeed);
+    });
+    leftZone.on("pointerup", () => {
+      this.trashBin.setVelocityX(0);
+    });
+
+    // Zone pour le contrôle droit
+    const rightZone = this.add.zone(
+      this.scale.width / 2,
+      0,
+      this.scale.width / 2,
+      this.scale.height
+    );
+    rightZone.setOrigin(0, 0).setInteractive();
+    rightZone.on("pointerdown", () => {
+      this.trashBin.setVelocityX(this.trashBinSpeed);
+    });
+    rightZone.on("pointerup", () => {
+      this.trashBin.setVelocityX(0);
+    });
   }
 
   spawnTrash() {
