@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import pipe from './assets/pipe.png';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -13,7 +14,7 @@ export default class GameScene extends Phaser.Scene {
       'https://png.pngtree.com/background/20231017/original/pngtree-free-space-computer-generated-3d-illustration-of-underwater-granite-rock-landscape-picture-image_5586277.jpg'
     ); // Image de l'arrière-plan
     this.load.image('robot', 'https://cdn.pixabay.com/photo/2017/08/13/21/17/fish-2638627_1280.png'); // Robot nettoyeur
-    this.load.image('pipe', 'https://art.pixilart.com/sr29cd06c39f7aws3.png'); // Tuyaux
+    this.load.image('pipe', pipe); // Tuyaux
   }
 
   create() {
@@ -23,7 +24,7 @@ export default class GameScene extends Phaser.Scene {
 
     // Ajouter le joueur
     this.robot = this.physics.add.sprite(100, this.scale.height / 2, 'robot');
-    this.robot.setScale(0.05 * (this.scale.width / 800)); // Taille réduite
+    this.robot.setScale(0.07); // Taille ajustée pour mieux correspondre
     this.robot.setCollideWorldBounds(true); // Empêcher de sortir de l'écran
 
     // Appliquer une gravité
@@ -59,21 +60,28 @@ export default class GameScene extends Phaser.Scene {
   }
 
   spawnPipes() {
-    const pipeGap = 150; // Écart entre les tuyaux
-    const pipeY = Phaser.Math.Between(100, this.scale.height - 100 - pipeGap);
+    const pipeGap = 200; // Écart vertical entre les tuyaux
+    const pipeY = Phaser.Math.Between(pipeGap, this.scale.height - pipeGap); // Position aléatoire
 
-    // Ajouter le tuyau du haut (avec rotation)
-    const upperPipe = this.pipesGroup.create(this.scale.width, pipeY, 'pipe');
-    upperPipe.setOrigin(0, 0); // Aligné en bas
-    upperPipe.setFlipY(true); // Retourner verticalement le tuyau pour qu'il pointe vers le bas
-    upperPipe.setDisplaySize(280, 400); // Ajuster la taille
-    upperPipe.setVelocityX(-200); // Déplacer vers la gauche
+    // Calcul de la hauteur pour que les tuyaux touchent les bords
+    const upperPipeHeight = pipeY - pipeGap / 2;
+    const lowerPipeHeight = this.scale.height - pipeY - pipeGap / 2;
+
+    // Ajouter le tuyau du haut
+    const upperPipe = this.pipesGroup.create(this.scale.width, 0, 'pipe');
+    upperPipe.setOrigin(0, 0); // Aligner en haut à gauche
+    upperPipe.setDisplaySize(80, upperPipeHeight); // Ajuster la hauteur dynamique
+    upperPipe.setFlipY(false); // Retourner verticalement le tuyau
+
+    upperPipe.setVelocityX(-200); // Déplacement horizontal vers la gauche
 
     // Ajouter le tuyau du bas
-    const lowerPipe = this.pipesGroup.create(this.scale.width, pipeY + pipeGap, 'pipe');
-    lowerPipe.setOrigin(0, 1); // Aligné en haut
-    lowerPipe.setDisplaySize(280, 400); // Ajuster la taille
-    lowerPipe.setVelocityX(-200); // Déplacer vers la gauche
+    const lowerPipe = this.pipesGroup.create(this.scale.width, pipeY + pipeGap / 2, 'pipe');
+    lowerPipe.setOrigin(0, 0); // Aligner en haut à gauche
+    lowerPipe.setDisplaySize(80, lowerPipeHeight); // Ajuster la hauteur dynamique
+    lowerPipe.setFlipY(true); // Retourner verticalement le tuyau
+
+    lowerPipe.setVelocityX(-200); // Déplacement horizontal vers la gauche
 
     // Supprimer les tuyaux lorsqu'ils sortent de l'écran
     this.pipesGroup.children.each((pipe) => {
