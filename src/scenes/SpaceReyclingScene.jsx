@@ -9,7 +9,8 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
     this.score = 0; // Score initial
     this.health = 5; // Points de vie
     this.trashBinSpeed = 0; // Vitesse dynamique calculée
-    this.bottleFallSpeed = 100; // Réduire la vitesse de chute des bouteilles
+    this.bottleFallSpeed = 150; // Vitesse de chute des bouteilles
+    this.movingDirection = 0; // -1 pour gauche, 1 pour droite, 0 pour aucun mouvement
   }
 
   preload() {
@@ -87,10 +88,10 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
     const leftZone = this.add.zone(0, 0, this.scale.width / 2, this.scale.height);
     leftZone.setOrigin(0, 0).setInteractive();
     leftZone.on("pointerdown", () => {
-      this.trashBin.setVelocityX(-this.trashBinSpeed);
+      this.movingDirection = -1; // Déplacement à gauche
     });
     leftZone.on("pointerup", () => {
-      this.trashBin.setVelocityX(0);
+      this.movingDirection = 0; // Arrêt du déplacement
     });
 
     // Zone pour le contrôle droit
@@ -102,33 +103,19 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
     );
     rightZone.setOrigin(0, 0).setInteractive();
     rightZone.on("pointerdown", () => {
-      this.trashBin.setVelocityX(this.trashBinSpeed);
+      this.movingDirection = 1; // Déplacement à droite
     });
     rightZone.on("pointerup", () => {
-      this.trashBin.setVelocityX(0);
+      this.movingDirection = 0; // Arrêt du déplacement
     });
   }
 
   spawnTrash() {
     // Générer une bouteille à une position horizontale aléatoire
     const x = Phaser.Math.Between(50, this.scale.width - 50);
-
-    // Calculer la distance entre la bouteille et la poubelle
-    const distanceFromTrashBin = Math.abs(x - this.trashBin.x);
-
-    // Si la bouteille est trop éloignée de la poubelle, rapprocher sa position
-    if (distanceFromTrashBin > this.scale.width / 2) {
-      const direction = x > this.trashBin.x ? -1 : 1; // Déterminer la direction
-      const adjustedX = this.trashBin.x + direction * (this.scale.width / 3);
-      const adjustedPosition = Phaser.Math.Clamp(adjustedX, 50, this.scale.width - 50);
-      const bottle = this.trashGroup.create(adjustedPosition, 0, "bottle");
-      bottle.setVelocityY(this.bottleFallSpeed); // Faire descendre la bouteille
-      bottle.setScale(0.10); // Taille ajustée
-    } else {
-      const bottle = this.trashGroup.create(x, 0, "bottle");
-      bottle.setVelocityY(this.bottleFallSpeed); // Faire descendre la bouteille
-      bottle.setScale(0.12); // Taille ajustée
-    }
+    const bottle = this.trashGroup.create(x, 0, "bottle");
+    bottle.setVelocityY(this.bottleFallSpeed); // Faire descendre la bouteille
+    bottle.setScale(0.12); // Taille ajustée
   }
 
   collectTrash(trashBin, bottle) {
@@ -146,6 +133,10 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
       this.trashBin.setVelocityX(-this.trashBinSpeed); // Déplacement à gauche
     } else if (this.cursors.right.isDown) {
       this.trashBin.setVelocityX(this.trashBinSpeed); // Déplacement à droite
+    } else if (this.movingDirection === -1) {
+      this.trashBin.setVelocityX(-this.trashBinSpeed); // Déplacement à gauche en mobile
+    } else if (this.movingDirection === 1) {
+      this.trashBin.setVelocityX(this.trashBinSpeed); // Déplacement à droite en mobile
     } else {
       this.trashBin.setVelocityX(0); // Arrêt
     }
