@@ -93,11 +93,11 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
       const adjustedPosition = Phaser.Math.Clamp(adjustedX, 50, this.scale.width - 50);
       const bottle = this.trashGroup.create(adjustedPosition, 0, "bottle");
       bottle.setVelocityY(this.bottleFallSpeed); // Faire descendre la bouteille
-      bottle.setScale(0.2); // Taille ajustée
+      bottle.setScale(0.10); // Taille ajustée
     } else {
       const bottle = this.trashGroup.create(x, 0, "bottle");
       bottle.setVelocityY(this.bottleFallSpeed); // Faire descendre la bouteille
-      bottle.setScale(0.2); // Taille ajustée
+      bottle.setScale(0.12); // Taille ajustée
     }
   }
 
