@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import bottle from "../assets/bottle.png";
 import trash from "../assets/trash.png";
 import heart from "../assets/heart.png"; // Image pour les cœurs
+import background from "../assets/background.jpg"; // Image pour les cœurs
 
 export default class SpaceRecyclingScene extends Phaser.Scene {
   constructor() {
@@ -17,7 +18,7 @@ export default class SpaceRecyclingScene extends Phaser.Scene {
     // Charger les ressources
     this.load.image(
       "background",
-      "https://png.pngtree.com/background/20231017/original/pngtree-free-space-computer-generated-3d-illustration-of-underwater-granite-rock-landscape-picture-image_5586277.jpg"
+      background
     ); // Fond d'écran
     this.load.image("bottle", bottle); // Déchets
     this.load.image("trashBin", trash); // Poubelle
