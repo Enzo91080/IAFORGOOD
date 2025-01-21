@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import pipe from './assets/pipe.png';
+import tortue from './assets/tortue.png';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -13,7 +14,7 @@ export default class GameScene extends Phaser.Scene {
       'background',
       'https://png.pngtree.com/background/20231017/original/pngtree-free-space-computer-generated-3d-illustration-of-underwater-granite-rock-landscape-picture-image_5586277.jpg'
     ); // Image de l'arrière-plan
-    this.load.image('robot', 'https://cdn.pixabay.com/photo/2017/08/13/21/17/fish-2638627_1280.png'); // Robot nettoyeur
+    this.load.image('robot', tortue); // Robot nettoyeur
     this.load.image('pipe', pipe); // Tuyaux
   }
 
@@ -24,7 +25,7 @@ export default class GameScene extends Phaser.Scene {
 
     // Ajouter le joueur
     this.robot = this.physics.add.sprite(100, this.scale.height / 2, 'robot');
-    this.robot.setScale(0.07); // Taille ajustée pour mieux correspondre
+    this.robot.setScale(0.2); // Taille ajustée pour mieux correspondre
     this.robot.setCollideWorldBounds(true); // Empêcher de sortir de l'écran
 
     // Appliquer une gravité
