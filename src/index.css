@@ -10,6 +10,7 @@ body, html {
 /* Assure que le canvas Phaser occupe tout l'écran */
 #game-container canvas {
   display: block;
+  background-repeat: no-repeat;
   width: 100% !important;
   height: 100% !important;
   border: none; /* Supprime les bordures noires éventuelles */
