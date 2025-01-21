@@ -1,0 +1,16 @@
+/* Supprime les marges et les paddings par défaut */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Assure que le canvas Phaser occupe tout l'écran */
+#game-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  border: none; /* Supprime les bordures noires éventuelles */
+}
